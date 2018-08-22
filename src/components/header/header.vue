@@ -33,11 +33,24 @@
 		<div class="background">
 			<img :src="seller.avatar" width="100%" height="100%" />
 		</div>
-		<div class="detail" v-show="detailShow"></div>
+		<!--弹出层，包含两个大的div-->
+		<div class="detail" v-show="detailShow">
+			<div class="detail-wrapper clearfix">
+				<!--弹出层实体内容-->
+				<div class="detail-main">
+					<h1 class="name">{{seller.name}}</h1>
+				</div>
+			</div>
+			<div class="detail-close">
+				<i class="icon-close"></i>
+			</div>
+		</div>
 	</div>
 </template>
 
 <script>
+	import star from '../star/star'; 
+	
 	export default {
 		props: {
 			seller: {}
@@ -59,6 +72,7 @@
 </script>
 
 <style>
+	@import url("../../../static/css/common.css");
 	.header {
 		color: white;
 		position: relative;
@@ -264,9 +278,41 @@
 		width: 100%;
 		height: 100%;
 		overflow: auto;
-		filter: blur(5px);
+		filter: blur(0px);
 		background: rgba(7, 17, 27, .8);
 		top: 0;
 		left: 0;
+	}
+	
+	.detail-wrapper {
+		min-height: 100%;
+		width: 100%;
+	}
+	
+	.detail-main {
+		margin-top: 64px;
+		/*padding-bottom是必须的,这个就是关闭标志到底部之间的距离*/
+		padding-bottom: 64px;
+	}
+	
+	.detail-close {
+		position: relative;
+		width: 32px;
+		height: 32px;
+		margin: -64px auto 0 auto;
+		clear: both;
+		font-size: 32px;
+		text-align: center;
+	}
+	
+	.icon-close:before {
+		content: "X";
+		font-style: normal;
+	}
+	
+	.name {
+		line-height: 16px;
+		font-weight: 700;
+		text-align: center;
 	}
 </style>
