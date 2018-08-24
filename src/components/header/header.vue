@@ -34,26 +34,56 @@
 			<img :src="seller.avatar" width="100%" height="100%" />
 		</div>
 		<!--弹出层，包含两个大的div-->
-		<div class="detail" v-show="detailShow">
-			<div class="detail-wrapper clearfix">
-				<!--弹出层实体内容-->
-				<div class="detail-main">
-					<h1 class="name">{{seller.name}}</h1>
+		<transition name='fade'>
+			<div class="detail" v-show="detailShow">
+				<div class="detail-wrapper clearfix">
+					<!--弹出层实体内容-->
+					<div class="detail-main">
+						<h1 class="name">{{seller.name}}</h1>
+						<!--评分星数-->
+						<div class="star-wrapper">
+							<star :size="48" :score="seller.score"></star>
+						</div>
+						<!--标题-->
+						<div class="title">
+							<div class="line"></div>
+							<div class="text">优惠信息</div>
+							<div class="line"></div>
+						</div>
+						<!--标签-->
+						<ul v-if="seller.supports" class="supports">
+							<li class="support-item" v-for="(item,index) in seller.supports">
+								<span class="icon" :class="classMap[seller.supports[index].type]"></span>
+								<span class="text">{{seller.supports[index].description}}</span>
+							</li>
+						</ul>
+						<div class="title">
+							<div class="line"></div>
+							<div class="text">商家公告</div>
+							<div class="line"></div>
+						</div>
+						<div class="bulletin">
+							<p class="content">{{seller.bulletin}}</p>
+						</div>
+					</div>
+				</div>
+				<div class="detail-close" @click="hide">
+					<i class="icon-close"></i>
 				</div>
 			</div>
-			<div class="detail-close">
-				<i class="icon-close"></i>
-			</div>
-		</div>
+		</transition>
 	</div>
 </template>
 
 <script>
-	import star from '../star/star'; 
-	
+	import star from '../star/star';
+
 	export default {
 		props: {
 			seller: {}
+		},
+		components: {
+			star
 		},
 		data() {
 			return {
@@ -66,12 +96,16 @@
 		methods: {
 			showDetail() {
 				this.detailShow = true
+			},
+			hide() {
+				console.log(1)
+				this.detailShow = false
 			}
 		}
 	}
 </script>
 
-<style>
+<style scoped>
 	@import url("../../../static/css/common.css");
 	.header {
 		color: white;
@@ -149,31 +183,31 @@
 	}
 	
 	.discount {
-		width: 30px;
+		width: 18px;
 		height: 18px;
 		display: inline-block;
 		background-image: url('discount_1@2x.png');
-		background-size: 30px 18px;
+		background-size: 18px 18px;
 		background-repeat: no-repeat;
 		vertical-align: text-top
 	}
 	
 	.guarantee {
-		width: 30px;
+		width: 18px;
 		height: 18px;
 		display: inline-block;
 		background-image: url('guarantee_1@2x.png');
-		background-size: 30px 18px;
+		background-size: 18px 18px;
 		background-repeat: no-repeat;
 		vertical-align: text-top
 	}
 	
 	.invoice {
-		width: 30px;
+		width: 18px;
 		height: 18px;
 		display: inline-block;
 		background-image: url('invoice_1@2x.png');
-		background-size: 30px 18px;
+		background-size: 18px 18px;
 		background-repeat: no-repeat;
 		vertical-align: text-top
 	}
@@ -183,7 +217,7 @@
 		height: 18px;
 		display: inline-block;
 		background-image: url('special_1@2x.png');
-		background-size: 30px 18px;
+		background-size: 18px 18px;
 		background-repeat: no-repeat;
 		vertical-align: text-top
 	}
@@ -284,6 +318,18 @@
 		left: 0;
 	}
 	
+	.fade-enter-active,
+	.fade-leave-active {
+		transition: all 0.5s
+	}
+	
+	.fade-enter,
+	.fade-leave-to {
+		opacity: 0;
+		background: rgba(7, 17, 27, 0);
+	}
+
+	
 	.detail-wrapper {
 		min-height: 100%;
 		width: 100%;
@@ -306,7 +352,7 @@
 	}
 	
 	.icon-close:before {
-		content: "X";
+		content: "x";
 		font-style: normal;
 	}
 	
@@ -314,5 +360,69 @@
 		line-height: 16px;
 		font-weight: 700;
 		text-align: center;
+	}
+	
+	.star-wrapper {
+		margin-top: 18px;
+		padding: 2px 0;
+		text-align: center;
+	}
+	
+	.detail-main .title {
+		display: flex;
+		width: 80%;
+		margin: 30px auto 24px auto;
+	}
+	
+	.line {
+		flex: 1;
+		position: relative;
+		top: -6px;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+	}
+	
+	.detail-main .text {
+		/*padding: 0 12px;*/
+		font-size: 14px;
+		font-weight: 700;
+	}
+	
+	.supports {
+		width: 80%;
+		margin: 0 auto;
+	}
+	
+	.support-item {
+		padding: 0 12px;
+		margin-bottom: 12px;
+		font-size: 0;
+	}
+	
+	.support-item:last-of-type {
+		margin-bottom: 0;
+	}
+	
+	.support-item>icon {
+		display: inline-block;
+		width: 16px;
+		height: 16px;
+		vertical-align: top;
+		margin-right: 6px;
+		background-size: 16px 16px;
+		background-repeat: no-repeat;
+	}
+	
+	.support-item>.text {
+		display: inline-block;
+		line-height: 16px;
+		font-size: 12px;
+		margin-left: 4px;
+	}
+	
+	.bulletin {
+		width: 80%;
+		margin: 0 12px;
+		line-height: 24px;
+		font-size: 12px;
 	}
 </style>
