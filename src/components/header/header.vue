@@ -98,7 +98,6 @@
 				this.detailShow = true
 			},
 			hide() {
-				console.log(1)
 				this.detailShow = false
 			}
 		}
