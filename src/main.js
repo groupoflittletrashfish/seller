@@ -7,13 +7,14 @@ import goods from './components/goods/goods'
 import seller from './components/seller/seller'
 import ratings from './components/ratings/ratings'
 import vueResource from 'vue-resource'
+import $ from 'jquery'
 
 Vue.config.productionTip = false
 Vue.use(VueRouter)
 Vue.use(vueResource)
 
 const router = new VueRouter({
-	linkActiveClass:'active',
+	linkActiveClass: 'active',
 	routes: [{
 			path: '/goods',
 			component: goods
