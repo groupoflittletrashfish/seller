@@ -31,6 +31,9 @@
 									<span class="now">￥{{food.price}}</span>
 									<span v-show="food.oldPrice" class="old">￥{{food.oldPrice}}</span>
 								</div>
+								<div class="cartcontrol-wapper">
+									<cartcontrol :food="food" v-on:addCart="cartAdd" />
+								</div>
 							</div>
 						</li>
 					</ul>
@@ -38,14 +41,13 @@
 			</ul>
 		</div>
 		<!--购物车-->
-		<shopcart>
-			
-		</shopcart>
+		<shopcart :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice" :selectFoods="selectFoods" ref="shopcart"></shopcart>
 	</div>
 </template>
 
 <script>
 	import shopcart from '../shopcart/shopcart'
+	import cartcontrol from '../cartcontrol/cartcontrol'
 	const ERROR_OK = 0;
 
 	export default {
@@ -54,14 +56,20 @@
 
 			}
 		},
-		components:{
-			shopcart
+		components: {
+			shopcart,
+			cartcontrol
 		},
 		data() {
 			return {
 				goods: [],
 				listHeight: [],
 				y: 0,
+			}
+		},
+		events: {
+			'card.add' (target) {
+				this.drop(target);
 			}
 		},
 		computed: {
@@ -74,6 +82,17 @@
 					}
 				}
 				return 0;
+			},
+			selectFoods() {
+				let foods = [];
+				this.goods.forEach((good) => {
+					good.foods.forEach((food) => {
+						if(food.count > 0) {
+							foods.push(food);
+						}
+					})
+				})
+				return foods;
 			}
 		},
 		created() {
@@ -107,10 +126,15 @@
 					that.y = Math.round(this.scrollTop)
 				}
 			},
-			selectMenu(index,e){
-				console.log(e.target)
-				var top=this.listHeight[index];
-				this.$refs.foodWrapper.scrollTop=top
+			selectMenu(index, e) {
+				var top = this.listHeight[index];
+				this.$refs.foodWrapper.scrollTop = top
+			},
+			drop(target) {
+				this.$refs.shopcart.drop(target);
+			},
+			cartAdd(e) {
+				this.drop(e)
 			}
 		}
 	}
@@ -317,5 +341,10 @@
 		background: white;
 		font-weight: 700;
 	}
-
+	
+	.cartcontrol-wapper {
+		position: absolute;
+		bottom: 12px;
+		right: 0px;
+	}
 </style>

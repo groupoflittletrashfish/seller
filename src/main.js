@@ -17,7 +17,8 @@ const router = new VueRouter({
 	linkActiveClass: 'active',
 	routes: [{
 			path: '/goods',
-			component: goods
+			component: goods,
+			name:'goods'
 		},
 		{
 			path: '/ratings',

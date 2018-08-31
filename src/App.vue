@@ -5,7 +5,12 @@
 		</div>
 		<div class="tab">
 			<div class="tab-item">
-				<router-link to="/goods">商品</router-link>
+				<router-link to="{
+					path:'goods',
+					params:{
+						seller:seller
+					}
+				}">商品</router-link>
 			</div>
 			<div class="tab-item">
 				<router-link to="/ratings">评论</router-link>
@@ -14,7 +19,7 @@
 				<router-link to="/seller">商家</router-link>
 			</div>
 		</div>
-		<router-view></router-view>
+		<router-view :seller="seller"></router-view>
 	</div>
 </template>
 
@@ -32,9 +37,8 @@
 					response = response.body;
 					console.log(response)
 					if(response.errno == 0) {
-						this.seller=response.data
+						this.seller = response.data
 					}
-
 				}
 			)
 		},
